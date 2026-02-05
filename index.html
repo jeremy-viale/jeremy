@@ -53,13 +53,28 @@
             background-color: #ff4d6d;
             color: white;
             box-shadow: 0 4px 15px rgba(255, 77, 109, 0.4);
-            z-index: 100; /* Toujours au-dessus */
+            z-index: 100;
+        }
+
+        #waBtn {
+            display: none; 
+            background-color: #25D366; /* Couleur WhatsApp */
+            color: white;
+            margin-top: 25px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-10px);}
+            60% {transform: translateY(-5px);}
         }
 
         #noBtn {
             background-color: #ffffff;
             color: #ff4d6d;
-            position: fixed; /* Pour bouger partout sur l'écran */
+            position: fixed;
             border: 2px solid #ff4d6d;
             touch-action: none;
             z-index: 50;
@@ -77,8 +92,8 @@
         }
 
         .otter {
-            font-size: 50px;
-            margin: 10px;
+            font-size: 60px;
+            margin: 15px;
         }
     </style>
 </head>
@@ -95,64 +110,49 @@
 
     <div id="message" class="success-message">
         <h1>Yeaaaah ! ❤️</h1>
-        <p style="font-size: 1.5rem; color: #ff4d6d;">C'est un rendez-vous ! <br> Je t'envoie un petit message...</p>
+        <p style="font-size: 1.5rem; color: #ff4d6d;">C'est un rendez-vous !</p>
         <div class="otter">🦦💞🦦</div>
+        <button id="waBtn" onclick="sendWhatsApp()">Envoyer un message à mon cœur ❤️</button>
     </div>
 
     <script>
-        let speed = 2000; // Vitesse de départ (2 secondes)
+        let speed = 2000;
         let moveInterval;
+        const numero = "33684218988"; 
 
-        // Fonction pour déplacer le bouton à un endroit aléatoire
         function moveButton() {
             const btn = document.getElementById('noBtn');
             const padding = 100;
-            
             const maxX = window.innerWidth - btn.offsetWidth - padding;
             const maxY = window.innerHeight - btn.offsetHeight - padding;
-
             const randomX = Math.floor(Math.random() * maxX) + (padding / 2);
             const randomY = Math.floor(Math.random() * maxY) + (padding / 2);
-
             btn.style.left = randomX + 'px';
             btn.style.top = randomY + 'px';
         }
 
-        // Fonction qui s'active quand on essaie de toucher le bouton
         function panic() {
-            // On accélère le mouvement
-            if (speed > 300) {
-                speed -= 300; 
-            } else {
-                speed = 150; // Vitesse maximale (très rapide)
-            }
-            
-            // On change de position immédiatement
+            if (speed > 300) speed -= 300; 
+            else speed = 150;
             moveButton();
-            
-            // On redémarre l'intervalle avec la nouvelle vitesse
             clearInterval(moveInterval);
             moveInterval = setInterval(moveButton, speed);
-            
-            // Petit effet visuel : le bouton rétrécit quand on l'approche
             document.getElementById('noBtn').style.transform = `scale(${speed/2000 + 0.5})`;
         }
 
-        // Lance le mouvement automatique dès le début
         moveInterval = setInterval(moveButton, speed);
 
         function celebrate() {
-            const numero = "33684218988";
-            const message = "OUI ! Je veux bien être ta Valentine ! ❤️🌹🦦";
-            
-            clearInterval(moveInterval); // On arrête le bouton fou
+            clearInterval(moveInterval);
             document.getElementById('quiz').style.display = 'none';
             document.getElementById('message').style.display = 'block';
-            
-            setTimeout(() => {
-                const whatsappUrl = `https://wa.me/${numero}?text=${encodeURIComponent(message)}`;
-                window.location.href = whatsappUrl;
-            }, 2000);
+            document.getElementById('waBtn').style.display = 'inline-block';
+        }
+
+        function sendWhatsApp() {
+            const messageWA = "OUI ! J'accepte d'être ta petite loutre ! ❤️🦦🌹";
+            const whatsappUrl = `https://wa.me/${numero}?text=${encodeURIComponent(messageWA)}`;
+            window.location.href = whatsappUrl;
         }
     </script>
 </body>
