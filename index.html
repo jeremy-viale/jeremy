@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Ma Valentine ? 🦦</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #ffe6e6;
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+            touch-action: manipulation;
+        }
+
+        #quiz {
+            text-align: center;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #ff4d6d;
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+            max-width: 600px;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            position: relative;
+            height: 100px;
+            width: 100%;
+        }
+
+        button {
+            padding: 15px 35px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s ease-out;
+        }
+
+        #yesBtn {
+            background-color: #ff4d6d;
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 77, 109, 0.4);
+            z-index: 100; /* Toujours au-dessus */
+        }
+
+        #noBtn {
+            background-color: #ffffff;
+            color: #ff4d6d;
+            position: fixed; /* Pour bouger partout sur l'écran */
+            border: 2px solid #ff4d6d;
+            touch-action: none;
+            z-index: 50;
+        }
+
+        .success-message {
+            display: none;
+            text-align: center;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .otter {
+            font-size: 50px;
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="quiz">
+        <h1>Coucou, La Saint-Valentin approche... et je me disais qu'elle serait beaucoup plus belle si tu acceptais d'être ma petit loutre, ca te dirait ? 🌹</h1>
+        <div class="otter">🦦</div>
+        <div class="buttons">
+            <button id="yesBtn" onclick="celebrate()">OUI !</button>
+            <button id="noBtn" onmouseover="panic()" ontouchstart="panic()">NON</button>
+        </div>
+    </div>
+
+    <div id="message" class="success-message">
+        <h1>Yeaaaah ! ❤️</h1>
+        <p style="font-size: 1.5rem; color: #ff4d6d;">C'est un rendez-vous ! <br> Je t'envoie un petit message...</p>
+        <div class="otter">🦦💞🦦</div>
+    </div>
+
+    <script>
+        let speed = 2000; // Vitesse de départ (2 secondes)
+        let moveInterval;
+
+        // Fonction pour déplacer le bouton à un endroit aléatoire
+        function moveButton() {
+            const btn = document.getElementById('noBtn');
+            const padding = 100;
+            
+            const maxX = window.innerWidth - btn.offsetWidth - padding;
+            const maxY = window.innerHeight - btn.offsetHeight - padding;
+
+            const randomX = Math.floor(Math.random() * maxX) + (padding / 2);
+            const randomY = Math.floor(Math.random() * maxY) + (padding / 2);
+
+            btn.style.left = randomX + 'px';
+            btn.style.top = randomY + 'px';
+        }
+
+        // Fonction qui s'active quand on essaie de toucher le bouton
+        function panic() {
+            // On accélère le mouvement
+            if (speed > 300) {
+                speed -= 300; 
+            } else {
+                speed = 150; // Vitesse maximale (très rapide)
+            }
+            
+            // On change de position immédiatement
+            moveButton();
+            
+            // On redémarre l'intervalle avec la nouvelle vitesse
+            clearInterval(moveInterval);
+            moveInterval = setInterval(moveButton, speed);
+            
+            // Petit effet visuel : le bouton rétrécit quand on l'approche
+            document.getElementById('noBtn').style.transform = `scale(${speed/2000 + 0.5})`;
+        }
+
+        // Lance le mouvement automatique dès le début
+        moveInterval = setInterval(moveButton, speed);
+
+        function celebrate() {
+            const numero = "33684218988";
+            const message = "OUI ! Je veux bien être ta Valentine ! ❤️🌹🦦";
+            
+            clearInterval(moveInterval); // On arrête le bouton fou
+            document.getElementById('quiz').style.display = 'none';
+            document.getElementById('message').style.display = 'block';
+            
+            setTimeout(() => {
+                const whatsappUrl = `https://wa.me/${numero}?text=${encodeURIComponent(message)}`;
+                window.location.href = whatsappUrl;
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
